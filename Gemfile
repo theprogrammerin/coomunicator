@@ -44,3 +44,6 @@ group :development, :test do
 end
 
 gem 'rest-client', '1.7.2' # making restful http calls
+
+gem 'iam_service', :path => 'engines/iam_service'
+gem 'user_service', :path => 'engines/user_service'

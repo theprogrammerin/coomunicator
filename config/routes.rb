@@ -1,10 +1,8 @@
 Rails.application.routes.draw do
 
-  scope 'iam-service' do
+  mount IamService::Engine => "/iam-service"
+  mount UserService::Engine => "/user-service"
 
-    get 'users/:id' => "application#status"
-
-  end
 
   namespace :test do
     resources :application do
