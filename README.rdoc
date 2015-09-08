@@ -1,5 +1,35 @@
 == README
 
+There are two services running on this "iam-service", "user-service" (dummy obvi)
+
+to run a second server use `rails s -p 4000 -P tmp/pids/server_remote.pid`
+
+=== To test
+
+==== Running both locally: 
+
+## Change `config.local_services = ["iam-service", "user-service"]` in application.rb
+
+For user service 
+http://localhost:3000/test?service=user-service
+
+For iam service 
+http://localhost:3000/test?service=iam-service
+
+
+==== Running one remotely: 
+
+## Change `config.local_services = ["iam-service"]` in application.rb
+
+For user service (will hit the 4000p server)
+http://localhost:3000/test?service=user-service
+
+For iam service 
+http://localhost:3000/test?service=iam-service
+
+
+-------------------------------
+
 This README would normally document whatever steps are necessary to get the
 application up and running.
 
