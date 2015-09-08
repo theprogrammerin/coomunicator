@@ -1,0 +1,17 @@
+PATH
+  remote: .
+  specs:
+    iam_service (0.0.1)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  iam_service!
+
+BUNDLED WITH
+   1.10.6
