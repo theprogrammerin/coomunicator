@@ -1,27 +1,27 @@
 class SuperCoordinator
 
-  def initialize
-
+  def initialize(request)
+    @service = request[:service]
+    if is_local?
+      @coordinator = LocalCoordinator.new(request)
+    else
+      @coordinator = RestCoordinator.new(request)
+    end
+    self
   end
 
-  def execute(request)
-
+  def execute()
+    @coordinator.fetch()
   end
 
-  private 
-
-  def process_local(request)
-    LocalCoordinator.new(request).fetch
-  end
-
-  def process_rest(request)
-    RestCoordinator.new(request).fetch
-  end
+  private
 
   def is_local?
+    Rails.application.config.local_services.include? @service
   end
 
   def is_rest?
+    !Rails.application.config.local_services.include?(@service)
   end
 
 

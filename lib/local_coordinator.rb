@@ -9,16 +9,6 @@ class LocalCoordinator
   end
 
   def fetch(include_headers=false)
-    # @app = ActionDispatch::Integration::Session.new(Rails.application)
-    # if @method == :get
-    #   @app.get @path, @params, headers
-    # end
-    # body = JSON.parse(@app.response.body)
-    # if include_headers
-    #   return([body, @app.response.headers])
-    # else
-    #   return(body)
-    # end
     request_env
   rescue JSON::ParserError
     nil
@@ -26,14 +16,21 @@ class LocalCoordinator
 
   #private
 
+  def application_engine
+    if @service.present?
+      return "#{@service.gsub("-","_").classify}::Engine".constantize
+    end
+    Rails.application
+  end
+
   def controller_class
-    resolved_route = Rails.application.routes.recognize_path(request_uri, method: @method)
+    resolved_route = application_engine.routes.recognize_path(request_uri, method: @method)
     "#{resolved_route[:controller].classify}Controller".constantize
   rescue ActionController::RoutingError
   end
 
   def controller_action
-    resolved_route = Rails.application.routes.recognize_path(request_uri, method: @method)
+    resolved_route = application_engine.routes.recognize_path(request_uri, method: @method)
     resolved_route[:action]
   end
 
@@ -59,12 +56,14 @@ class LocalCoordinator
   end
 
   def request_uri
-    "#{service_base_path}/#{@path}"
+    "/#{@path}"
   end
 
   def service_base_path
     if @service == "iam-service"
       "/iam-service"
+    elsif @service == "user-service"
+      "/user-service"
     end
   end
 

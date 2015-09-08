@@ -5,24 +5,35 @@ class RestCoordinator
     @headers = request[:headers] || {}
     @path = request[:path] || {}
     @service = request[:service] || {}
+    @method = request[:method] || :get
   end
 
-  def fetch 
+  def fetch(include_headers=false)
+    resp = RestClient::Request.execute({
+      method: @method,
+      url: request_uri,
+      headers: {
+        params: @params
+      }
+      })
+    JSON.parse(resp)
   end
 
   private
 
-  def request_uri 
-    "#{service_base_path}/#{path}"
+  def request_uri
+    "#{service_base_path}/#{@path}"
   end
 
   def service_base_path
-    if @service == "iam-service"
-      "#{default_protocol}localhost:3000/iam-service"
+    if @service == "user-service"
+      "#{default_protocol}localhost:4000/user-service"
+    elsif @service == "iam-service"
+      "#{default_protocol}localhost:4000/iam-service"
     end
   end
 
-  def default_protocol 
+  def default_protocol
     "http://"
   end
 

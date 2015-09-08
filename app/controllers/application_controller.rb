@@ -12,11 +12,14 @@ class ApplicationController < ActionController::Base
 
   def test
     # debugger
-    local = LocalCoordinator.new({ method: :post, path: "/test/application", params: { id: 2, name: "Ashutosh"} })
-    body, headers = local.fetch(true)
+    body = SuperCoordinator.new(
+      { method: :get,
+        path: "/status",
+        params: params,
+        service: params[:service]
+      }).execute
     render json: {
         body: body,
-        headers: headers
     }
   end
 end
